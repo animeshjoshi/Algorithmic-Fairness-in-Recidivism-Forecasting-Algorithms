@@ -1,0 +1,206 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+from xgboost import XGBClassifier
+from sklearn.metrics import confusion_matrix
+
+def group_one_ppr(df, protected_class, ground_truth, predictions):
+    
+    df['Ground Truth'] = ground_truth
+    df['Predictions'] = predictions
+    groupone_df = df[df[protected_class] == 1]
+    grouptwo_df = df[df[protected_class] == 0]
+    
+    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
+    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
+    
+    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
+    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
+
+    
+    
+    return go_ppr
+
+def group_two_ppr(df, protected_class, ground_truth, predictions):
+    
+    df['Ground Truth'] = ground_truth
+    df['Predictions'] = predictions
+    groupone_df = df[df[protected_class] == 1]
+    grouptwo_df = df[df[protected_class] == 0]
+    
+    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
+    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
+    
+    go_ppr = (gotp+gofp)/(gotp + gofn + gotp + gofp)
+    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
+    
+   
+
+
+    
+    
+    return gt_ppr
+
+
+
+    
+    
+lr_accuracy = []
+lda_accuracy = []
+rf_accuracy = []
+dtree_accuracy = []
+xg_accuracy = []
+
+lr_goppr = []
+lr_gtppr = []
+lda_goppr = []
+lda_gtppr = []
+rf_goppr = []
+rf_gtppr = []
+dtree_goppr = []
+dtree_gtppr = []
+xg_goppr = []
+xg_gtppr = []
+
+
+for test_fold in range(0, 250):
+
+    print('start loop')
+
+    test_fold_title = 'Folds/Fold ' + str(test_fold) + '.csv'
+
+    test = pd.read_csv(test_fold_title)
+    y_test = test['Recidivism_Within_3years']
+    y_train = test.drop(['Unnamed: 0', 'Recidivism_Within_3years'], axis = 1)
+
+    train_arr = []
+
+    
+    for train_titles in range(0, 250):
+
+        train_fold_title = 'Folds/Fold ' + str(train_titles) + '.csv'
+
+        print(train_fold_title)
+        print(test_fold_title)
+
+        print(train_fold_title != test_fold_title)
+
+        if train_fold_title != test_fold_title:
+
+            print('hi')
+
+            train = pd.read_csv(train_fold_title)
+            train = train.drop('Unnamed: 0', axis = 1)
+
+            train_arr.append(train)
+
+    train_data = pd.concat(train_arr)
+
+    X_train = train_data.drop('Recidivism_Within_3years', axis = 1)
+    X_test = train_data['Recidivism_Within_3years']
+
+    lr = LogisticRegression()
+    lr.fit(X_train, X_test)
+    lda = LinearDiscriminantAnalysis()
+    print('check')
+    lda.fit(X_train, X_test)
+    print('check 1.005')
+   
+    dtree = DecisionTreeClassifier()
+    dtree.fit(X_train, X_test)
+    rf = RandomForestClassifier(n_estimators = 100, random_state=22)
+    rf.fit(X_train, X_test)
+    print('check 2')
+
+        #Build the model
+    xg = XGBClassifier(n_estimators=100, max_depth=2, learning_rate=1, objective='binary:logistic', random_state=22)
+
+    # Trained the model
+    xg.fit(X_train, X_test)
+
+   # print(X_test.columns)
+
+    rf_predictions = rf.predict(y_train)
+
+    lda_predictions = lda.predict(y_train)
+    xg_predictions = xg.predict(y_train)
+
+    dtree_predictions = dtree.predict(y_train)
+
+    lr_predictions = lr.predict(y_train)
+
+    rf_accuracy.append(accuracy_score(rf.predict(y_train), y_test))
+    lda_accuracy.append(accuracy_score(lda.predict(y_train), y_test))
+    xg_accuracy.append(accuracy_score(xg.predict(y_train), y_test))
+    dtree_accuracy.append(accuracy_score(dtree.predict(y_train), y_test))
+    lr_accuracy.append(accuracy_score(lr.predict(y_train), y_test))
+
+
+
+
+    rf_goppr.append(group_one_ppr(y_train, 'Race_WHITE', y_test, rf_predictions))
+    rf_gtppr.append(group_two_ppr(y_train, 'Race_WHITE', y_test, rf_predictions))
+
+    lda_goppr.append(group_one_ppr(y_train, 'Race_WHITE', y_test, lda_predictions ))
+    lda_gtppr.append(group_two_ppr(y_train, 'Race_WHITE', y_test, lda_predictions ))
+
+    xg_goppr.append(group_one_ppr(y_train, 'Race_WHITE', y_test, xg_predictions))
+    xg_gtppr.append(group_two_ppr(y_train, 'Race_WHITE', y_test, xg_predictions))
+
+    dtree_goppr.append(group_one_ppr(y_train, 'Race_WHITE', y_test, dtree_predictions))
+    dtree_gtppr.append(group_two_ppr(y_train, 'Race_WHITE', y_test, dtree_predictions))
+
+    lr_goppr.append(group_one_ppr(y_train, 'Race_WHITE', y_test, lr_predictions))
+    lr_gtppr.append(group_two_ppr(y_train, 'Race_WHITE', y_test, lr_predictions))
+
+   
+    print('check 3')
+
+df1 = pd.DataFrame()
+
+df1['Logistic Regression Accuracy'] = lr_accuracy
+
+df1['LDA Accuracy'] = lda_accuracy
+
+df1['KNN Accuracy'] = xg_accuracy
+
+
+df1['Decision Tree Accuracy'] = dtree_accuracy
+
+df1['Random Forest Accuracy'] = rf_accuracy
+
+
+df1.to_csv('Model Comparison.csv')
+
+df = pd.DataFrame()
+
+df['Logistic Regression Priviledged Rate'] = lr_goppr
+
+df['Logistic Regression Discriminated Rate'] = lr_gtppr
+
+df['LDA Priviledged Rate'] = lda_goppr
+
+df['LDA Discriminated Rate'] = lda_gtppr
+
+df['XG Priviledged Rate'] = xg_goppr
+
+df['XG Discriminated Rate'] = xg_gtppr
+
+df['Decision Tree Priviledged Rate'] = dtree_goppr
+
+df['Decision Tree Discriminated Rate'] = dtree_gtppr
+
+df['RF Priviledged Rate'] = rf_goppr
+
+df['RF Discriminated Rate'] = rf_gtppr
+
+
+
+df.to_csv('Equalized Odds Distribution.csv')

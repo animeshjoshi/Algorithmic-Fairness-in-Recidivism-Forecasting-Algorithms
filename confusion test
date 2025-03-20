@@ -1,0 +1,339 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+from xgboost import XGBClassifier
+from sklearn.metrics import confusion_matrix
+
+def group_one_fn(df, protected_class, ground_truth, predictions):
+    
+    df['Ground Truth'] = ground_truth
+    df['Predictions'] = predictions
+    groupone_df = df[df[protected_class] == 1]
+    grouptwo_df = df[df[protected_class] == 0]
+    
+    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
+    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
+    
+    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
+    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
+    
+    return gofp/(gotp + gofn + gotp + gofp)
+
+def group_two_fn(df, protected_class, ground_truth, predictions):
+    
+    df['Ground Truth'] = ground_truth
+    df['Predictions'] = predictions
+    groupone_df = df[df[protected_class] == 1]
+    grouptwo_df = df[df[protected_class] == 0]
+    
+    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
+    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
+    
+    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
+    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
+    
+    return gtfp/(gttp + gtfn + gttp + gtfp)
+
+
+def group_one_fp(df, protected_class, ground_truth, predictions):
+    
+    df['Ground Truth'] = ground_truth
+    df['Predictions'] = predictions
+    groupone_df = df[df[protected_class] == 1]
+    grouptwo_df = df[df[protected_class] == 0]
+    
+    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
+    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
+    
+    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
+    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
+    
+    return gofn/(gotp + gofn + gotp + gofp)
+
+def group_two_fp(df, protected_class, ground_truth, predictions):
+    
+    df['Ground Truth'] = ground_truth
+    df['Predictions'] = predictions
+    groupone_df = df[df[protected_class] == 1]
+    grouptwo_df = df[df[protected_class] == 0]
+    
+    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
+    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
+    
+    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
+    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
+    
+    return gtfn/(gttp + gtfn + gttp + gtfp)
+
+def group_one_tn(df, protected_class, ground_truth, predictions):
+    
+    df['Ground Truth'] = ground_truth
+    df['Predictions'] = predictions
+    groupone_df = df[df[protected_class] == 1]
+    grouptwo_df = df[df[protected_class] == 0]
+    
+    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
+    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
+    
+    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
+    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
+    
+    return gotp/(gotp + gofn + gotp + gofp)
+
+def group_two_tn(df, protected_class, ground_truth, predictions):
+    
+    df['Ground Truth'] = ground_truth
+    df['Predictions'] = predictions
+    groupone_df = df[df[protected_class] == 1]
+    grouptwo_df = df[df[protected_class] == 0]
+    
+    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
+    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
+    
+    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
+    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
+    
+    return gttp/(gttp + gtfn + gttp + gtfp)
+
+def group_one_tp(df, protected_class, ground_truth, predictions):
+    
+    df['Ground Truth'] = ground_truth
+    df['Predictions'] = predictions
+    groupone_df = df[df[protected_class] == 1]
+    grouptwo_df = df[df[protected_class] == 0]
+    
+    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
+    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
+    
+    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
+    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
+    
+    return gotn/(gotp + gofn + gotp + gofp)
+
+def group_two_tp(df, protected_class, ground_truth, predictions):
+    
+    df['Ground Truth'] = ground_truth
+    df['Predictions'] = predictions
+    groupone_df = df[df[protected_class] == 1]
+    grouptwo_df = df[df[protected_class] == 0]
+    
+    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
+    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
+    
+    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
+    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
+    
+    return gttn/(gttp + gtfn + gttp + gtfp)
+    
+    
+
+
+lr_gotp = []
+lr_gttp = []
+lr_gofp = []
+lr_gtfp = []
+lr_gotn = []
+lr_gttn = []
+lr_gofn = []
+lr_gtfn = []
+
+lda_gotp = []
+lda_gttp = []
+lda_gofp = []
+lda_gtfp = []
+lda_gotn = []
+lda_gttn = []
+lda_gofn = []
+lda_gtfn = []
+
+rf_gotp = []
+rf_gttp = []
+rf_gofp = []
+rf_gtfp = []
+rf_gotn = []
+rf_gttn = []
+rf_gofn = []
+rf_gtfn = []
+
+
+xg_gotp = []
+xg_gttp = []
+xg_gofp = []
+xg_gtfp = []
+xg_gotn = []
+xg_gttn = []
+xg_gofn = []
+xg_gtfn = []
+
+
+for test_fold in range(0, 250):
+
+    print('start loop')
+
+    test_fold_title = 'Folds/Fold ' + str(test_fold) + '.csv'
+
+    test = pd.read_csv(test_fold_title)
+    y_test = test['Recidivism_Within_3years']
+    y_train = test.drop(['Unnamed: 0', 'Recidivism_Within_3years'], axis = 1)
+
+    train_arr = []
+
+    
+    for train_titles in range(0, 250):
+
+        train_fold_title = 'Folds/Fold ' + str(train_titles) + '.csv'
+
+        print(train_fold_title)
+        print(test_fold_title)
+
+        print(train_fold_title != test_fold_title)
+
+        if train_fold_title != test_fold_title:
+
+            print('hi')
+
+            train = pd.read_csv(train_fold_title)
+            train = train.drop('Unnamed: 0', axis = 1)
+
+            train_arr.append(train)
+
+    train_data = pd.concat(train_arr)
+
+    X_train = train_data.drop('Recidivism_Within_3years', axis = 1)
+    X_test = train_data['Recidivism_Within_3years']
+
+    lr = LogisticRegression()
+    lr.fit(X_train, X_test)
+    lda = LinearDiscriminantAnalysis()
+    print('check')
+    lda.fit(X_train, X_test)
+    print('check 1.005')
+   
+   # dtree = DecisionTreeClassifier()
+   # dtree.fit(X_train, X_test)
+    rf = RandomForestClassifier(n_estimators = 100, random_state=22)
+    rf.fit(X_train, X_test)
+    print('check 2')
+
+        #Build the model
+    xg = XGBClassifier(n_estimators=100, max_depth=2, learning_rate=1, objective='binary:logistic', random_state=22)
+
+    # Trained the model
+    xg.fit(X_train, X_test)
+
+   # print(X_test.columns)
+
+    rf_predictions = rf.predict(y_train)
+
+    lda_predictions = lda.predict(y_train)
+    xg_predictions = xg.predict(y_train)
+
+    #dtree_predictions = dtree.predict(y_train)
+
+    lr_predictions = lr.predict(y_train)
+
+    lr_gotp.append(group_one_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lr_gttp.append(group_two_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lr_gotn.append(group_one_tn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lr_gttn.append(group_two_tn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lr_gofp.append(group_one_fp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lr_gtfp.append(group_two_fp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lr_gofn.append(group_one_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lr_gtfn.append(group_two_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
+
+    rf_gotp.append(group_one_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    rf_gttp.append(group_two_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    rf_gotn.append(group_one_tn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    rf_gttn.append(group_two_tn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    rf_gofp.append(group_one_fp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    rf_gtfp.append(group_two_fp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    rf_gofn.append(group_one_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    rf_gtfn.append(group_two_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
+
+    xg_gotp.append(group_one_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    xg_gttp.append(group_two_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    xg_gotn.append(group_one_tn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    xg_gttn.append(group_two_tn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    xg_gofp.append(group_one_fp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    xg_gtfp.append(group_two_fp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    xg_gofn.append(group_one_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    xg_gtfn.append(group_two_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
+
+    lda_gotp.append(group_one_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lda_gttp.append(group_two_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lda_gotn.append(group_one_tn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lda_gttn.append(group_two_tn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lda_gofp.append(group_one_fp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lda_gtfp.append(group_two_fp(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lda_gofn.append(group_one_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lda_gtfn.append(group_two_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
+
+
+
+    
+
+
+
+
+
+
+   
+
+   
+    print('check 3')
+
+
+
+df = pd.DataFrame()
+
+df['RFA'] = rf_gotp
+df['RFB'] = rf_gttp
+df['RFC'] = rf_gofp
+df['RFD'] = rf_gtfp
+df['RFE'] = rf_gotn
+df['RFF'] = rf_gttn
+df['RFG'] = rf_gofn
+df['RFH'] = rf_gtfn
+
+df['LDA'] = lda_gotp
+df['LDB'] = lda_gttp
+df['LDC'] = lda_gofp
+df['LDD'] = lda_gtfp
+df['LDE'] = lda_gotn
+df['LDF'] = lda_gttn
+df['LDG'] = lda_gofn
+df['LDH'] = lda_gtfn
+
+df['XGA'] = xg_gotp
+df['XGB'] = xg_gttp
+df['XGC'] = xg_gofp
+df['XGD'] = xg_gtfp
+df['XGE'] = xg_gotn
+df['XGF'] = xg_gttn
+df['XGG'] = xg_gofn
+df['XGH'] = xg_gtfn
+
+
+df['LRA'] = lr_gotp
+df['LRB'] = lr_gttp
+df['LRC'] = lr_gofp
+df['LRD'] = lr_gtfp
+df['LRE'] = lr_gotn
+df['LRF'] = lr_gttn
+df['LRG'] = lr_gofn
+df['LRH'] = lr_gtfn
+
+
+
+df.to_csv('Confusion Distribution.csv')
+
+data = pd.read_csv('Confusion Distribution.csv')
+
+data.to_csv("C:/Users/anime/Downloads/confusion metrics.csv")
