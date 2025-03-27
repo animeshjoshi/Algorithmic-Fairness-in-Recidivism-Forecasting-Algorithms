@@ -239,14 +239,14 @@ for test_fold in range(0, 250):
 
     lr_predictions = lr.predict(y_train)
 
-    lr_gotp.append(group_one_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
-    lr_gttp.append(group_two_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
-    lr_gotn.append(group_one_tn(y_train, 'Race_WHITE', y_test, rf_predictions))
-    lr_gttn.append(group_two_tn(y_train, 'Race_WHITE', y_test, rf_predictions))
-    lr_gofp.append(group_one_fp(y_train, 'Race_WHITE', y_test, rf_predictions))
-    lr_gtfp.append(group_two_fp(y_train, 'Race_WHITE', y_test, rf_predictions))
-    lr_gofn.append(group_one_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
-    lr_gtfn.append(group_two_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lr_gotp.append(group_one_tp(y_train, 'Race_WHITE', y_test, lr_predictions))
+    lr_gttp.append(group_two_tp(y_train, 'Race_WHITE', y_test, lr_predictions))
+    lr_gotn.append(group_one_tn(y_train, 'Race_WHITE', y_test, lr_predictions))
+    lr_gttn.append(group_two_tn(y_train, 'Race_WHITE', y_test, lr_predictions))
+    lr_gofp.append(group_one_fp(y_train, 'Race_WHITE', y_test, lr_predictions))
+    lr_gtfp.append(group_two_fp(y_train, 'Race_WHITE', y_test, lr_predictions))
+    lr_gofn.append(group_one_fn(y_train, 'Race_WHITE', y_test, lr_predictions))
+    lr_gtfn.append(group_two_fn(y_train, 'Race_WHITE', y_test, lr_predictions))
 
     rf_gotp.append(group_one_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
     rf_gttp.append(group_two_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
@@ -257,23 +257,27 @@ for test_fold in range(0, 250):
     rf_gofn.append(group_one_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
     rf_gtfn.append(group_two_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
 
-    xg_gotp.append(group_one_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
-    xg_gttp.append(group_two_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
-    xg_gotn.append(group_one_tn(y_train, 'Race_WHITE', y_test, rf_predictions))
-    xg_gttn.append(group_two_tn(y_train, 'Race_WHITE', y_test, rf_predictions))
-    xg_gofp.append(group_one_fp(y_train, 'Race_WHITE', y_test, rf_predictions))
-    xg_gtfp.append(group_two_fp(y_train, 'Race_WHITE', y_test, rf_predictions))
-    xg_gofn.append(group_one_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
-    xg_gtfn.append(group_two_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    xg_gotp.append(group_one_tp(y_train, 'Race_WHITE', y_test, xg_predictions))
+    xg_gttp.append(group_two_tp(y_train, 'Race_WHITE', y_test, xg_predictions))
+    xg_gotn.append(group_one_tn(y_train, 'Race_WHITE', y_test,xg_predictions))
+    xg_gttn.append(group_two_tn(y_train, 'Race_WHITE', y_test, xg_predictions))
+    xg_gofp.append(group_one_fp(y_train, 'Race_WHITE', y_test, xg_predictions))
+    xg_gtfp.append(group_two_fp(y_train, 'Race_WHITE', y_test,xg_predictions))
+    xg_gofn.append(group_one_fn(y_train, 'Race_WHITE', y_test,xg_predictions))
+    xg_gtfn.append(group_two_fn(y_train, 'Race_WHITE', y_test, xg_predictions))
 
-    lda_gotp.append(group_one_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
-    lda_gttp.append(group_two_tp(y_train, 'Race_WHITE', y_test, rf_predictions))
-    lda_gotn.append(group_one_tn(y_train, 'Race_WHITE', y_test, rf_predictions))
-    lda_gttn.append(group_two_tn(y_train, 'Race_WHITE', y_test, rf_predictions))
-    lda_gofp.append(group_one_fp(y_train, 'Race_WHITE', y_test, rf_predictions))
-    lda_gtfp.append(group_two_fp(y_train, 'Race_WHITE', y_test, rf_predictions))
-    lda_gofn.append(group_one_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
-    lda_gtfn.append(group_two_fn(y_train, 'Race_WHITE', y_test, rf_predictions))
+    lda_gotp.append(group_one_tp(y_train, 'Race_WHITE', y_test, lda_predictions))
+    lda_gttp.append(group_two_tp(y_train, 'Race_WHITE', y_test, lda_predictions))
+    lda_gotn.append(group_one_tn(y_train, 'Race_WHITE', y_test,lda_predictions))
+    lda_gttn.append(group_two_tn(y_train, 'Race_WHITE', y_test,lda_predictions))
+    lda_gofp.append(group_one_fp(y_train, 'Race_WHITE', y_test, lda_predictions))
+    lda_gtfp.append(group_two_fp(y_train, 'Race_WHITE', y_test,lda_predictions))
+    lda_gofn.append(group_one_fn(y_train, 'Race_WHITE', y_test, lda_predictions))
+    lda_gtfn.append(group_two_fn(y_train, 'Race_WHITE', y_test, lda_predictions))
+
+    
+
+
 
 
 
