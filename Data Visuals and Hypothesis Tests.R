@@ -202,3 +202,12 @@ names(confusion_test)
 mean(confusion_test$RFB)
 
 summary(confusion_test)
+
+sd(confusion_test$RFB)**2
+mean(confusion_test$LDA)
+
+null_likelihood <- (1/(((2*pi)**0.5)*sd(confusion_test$RFA)))**250
+
+names(confusion_test)
+
+

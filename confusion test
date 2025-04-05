@@ -16,30 +16,17 @@ def group_one_fn(df, protected_class, ground_truth, predictions):
     df['Ground Truth'] = ground_truth
     df['Predictions'] = predictions
     groupone_df = df[df[protected_class] == 1]
-    grouptwo_df = df[df[protected_class] == 0]
     
-    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
-    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
+    return len(groupone_df[(groupone_df['Predictions'] == 1) & (groupone_df['Ground Truth'] == 0)])/len(groupone_df)
     
-    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
-    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
-    
-    return gofp/(gotp + gofn + gotp + gofp)
 
 def group_two_fn(df, protected_class, ground_truth, predictions):
     
     df['Ground Truth'] = ground_truth
     df['Predictions'] = predictions
-    groupone_df = df[df[protected_class] == 1]
-    grouptwo_df = df[df[protected_class] == 0]
-    
-    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
-    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
-    
-    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
-    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
-    
-    return gtfp/(gttp + gtfn + gttp + gtfp)
+    groupone_df = df[df[protected_class] == 0]
+
+    return len(groupone_df[(groupone_df['Predictions'] == 1) & (groupone_df['Ground Truth'] == 0)])/len(groupone_df)
 
 
 def group_one_fp(df, protected_class, ground_truth, predictions):
@@ -47,90 +34,47 @@ def group_one_fp(df, protected_class, ground_truth, predictions):
     df['Ground Truth'] = ground_truth
     df['Predictions'] = predictions
     groupone_df = df[df[protected_class] == 1]
-    grouptwo_df = df[df[protected_class] == 0]
+
     
-    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
-    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
-    
-    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
-    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
-    
-    return gofn/(gotp + gofn + gotp + gofp)
+    return len(groupone_df[(groupone_df['Predictions'] == 0) & (groupone_df['Ground Truth'] == 1)])/len(groupone_df)
 
 def group_two_fp(df, protected_class, ground_truth, predictions):
     
     df['Ground Truth'] = ground_truth
     df['Predictions'] = predictions
-    groupone_df = df[df[protected_class] == 1]
-    grouptwo_df = df[df[protected_class] == 0]
-    
-    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
-    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
-    
-    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
-    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
-    
-    return gtfn/(gttp + gtfn + gttp + gtfp)
+    groupone_df = df[df[protected_class] == 0]
+    return len(groupone_df[(groupone_df['Predictions'] == 0) & (groupone_df['Ground Truth'] == 1)])/len(groupone_df)
 
 def group_one_tn(df, protected_class, ground_truth, predictions):
     
     df['Ground Truth'] = ground_truth
     df['Predictions'] = predictions
     groupone_df = df[df[protected_class] == 1]
-    grouptwo_df = df[df[protected_class] == 0]
-    
-    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
-    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
-    
-    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
-    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
-    
-    return gotp/(gotp + gofn + gotp + gofp)
+
+    return len(groupone_df[(groupone_df['Predictions'] == 1) & (groupone_df['Ground Truth'] == 1)])/len(groupone_df)
 
 def group_two_tn(df, protected_class, ground_truth, predictions):
     
     df['Ground Truth'] = ground_truth
     df['Predictions'] = predictions
-    groupone_df = df[df[protected_class] == 1]
-    grouptwo_df = df[df[protected_class] == 0]
-    
-    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
-    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
-    
-    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
-    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
-    
-    return gttp/(gttp + gtfn + gttp + gtfp)
+    groupone_df = df[df[protected_class] == 0]
+    return len(groupone_df[(groupone_df['Predictions'] == 1) & (groupone_df['Ground Truth'] == 1)])/len(groupone_df)
 
 def group_one_tp(df, protected_class, ground_truth, predictions):
     
     df['Ground Truth'] = ground_truth
     df['Predictions'] = predictions
     groupone_df = df[df[protected_class] == 1]
-    grouptwo_df = df[df[protected_class] == 0]
-    
-    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
-    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
-    
-    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
-    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
-    
-    return gotn/(gotp + gofn + gotp + gofp)
+    return len(groupone_df[(groupone_df['Predictions'] == 0) & (groupone_df['Ground Truth'] == 0)])/len(groupone_df)
 
 def group_two_tp(df, protected_class, ground_truth, predictions):
     
     df['Ground Truth'] = ground_truth
     df['Predictions'] = predictions
-    groupone_df = df[df[protected_class] == 1]
-    grouptwo_df = df[df[protected_class] == 0]
-    
-    gotn, gofp, gofn, gotp = confusion_matrix(groupone_df['Ground Truth'], groupone_df['Predictions']).ravel()
-    gttn, gtfp, gtfn, gttp = confusion_matrix(grouptwo_df['Ground Truth'], grouptwo_df['Predictions']).ravel()
-    
-    go_ppr = (gofn+gotn)/(gotp + gofn + gotp + gofp)
-    gt_ppr = (gtfn+gttn)/(gttp + gtfn + gttp + gtfp)
-    
-    return gttn/(gttp + gtfn + gttp + gtfp)
+    groupone_df = df[df[protected_class] == 0]
+
+    return len(groupone_df[(groupone_df['Predictions'] == 0) & (groupone_df['Ground Truth'] == 0)])/len(groupone_df)
+
     
     
 
