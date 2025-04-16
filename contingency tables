@@ -1,0 +1,190 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+from xgboost import XGBClassifier
+from sklearn.metrics import confusion_matrix
+
+def white_recidivism(df, protected_class, ground_truth, predictions):
+    
+    df['Ground Truth'] = ground_truth
+    df['Predictions'] = predictions
+    groupone_df = df[df[protected_class] == 1]
+    
+    return len(groupone_df[groupone_df['Predictions'] == 1])
+
+def white_norecidivism(df, protected_class, ground_truth, predictions):
+    
+    df['Ground Truth'] = ground_truth
+    df['Predictions'] = predictions
+    groupone_df = df[df[protected_class] == 1]
+    
+    return len(groupone_df[groupone_df['Predictions'] == 0])
+    
+
+def black_recidivism(df, protected_class, ground_truth, predictions):
+    
+    df['Ground Truth'] = ground_truth
+    df['Predictions'] = predictions
+    groupone_df = df[df[protected_class] == 0]
+    
+    return len(groupone_df[groupone_df['Predictions'] == 1])
+
+def black_norecidivism(df, protected_class, ground_truth, predictions):
+    
+    df['Ground Truth'] = ground_truth
+    df['Predictions'] = predictions
+    groupone_df = df[df[protected_class] == 0]
+    
+    return len(groupone_df[groupone_df['Predictions'] == 0])
+    
+    
+
+
+lr_whiterecidivism = []
+lr_blackrecidivism = []
+lr_whitenorecidivism = []
+lr_blacknorecidivism = []
+
+lda_whiterecidivism = []
+lda_blackrecidivism = []
+lda_whitenorecidivism = []
+lda_blacknorecidivism = []
+
+rf_whiterecidivism = []
+rf_blackrecidivism = []
+rf_whitenorecidivism = []
+rf_blacknorecidivism = []
+
+xg_whiterecidivism = []
+xg_blackrecidivism = []
+xg_whitenorecidivism = []
+xg_blacknorecidivism = []
+
+
+for test_fold in range(0, 250):
+
+    print('start loop')
+
+    test_fold_title = 'Folds/Fold ' + str(test_fold) + '.csv'
+
+    test = pd.read_csv(test_fold_title)
+    y_test = test['Recidivism_Within_3years']
+    y_train = test.drop(['Unnamed: 0', 'Recidivism_Within_3years'], axis = 1)
+
+    train_arr = []
+
+    
+    for train_titles in range(0, 250):
+
+        train_fold_title = 'Folds/Fold ' + str(train_titles) + '.csv'
+
+        print(train_fold_title)
+        print(test_fold_title)
+
+        print(train_fold_title != test_fold_title)
+
+        if train_fold_title != test_fold_title:
+
+            print('hi')
+
+            train = pd.read_csv(train_fold_title)
+            train = train.drop('Unnamed: 0', axis = 1)
+
+            train_arr.append(train)
+
+    train_data = pd.concat(train_arr)
+
+    X_train = train_data.drop('Recidivism_Within_3years', axis = 1)
+    X_test = train_data['Recidivism_Within_3years']
+
+    lr = LogisticRegression()
+    lr.fit(X_train, X_test)
+    lda = LinearDiscriminantAnalysis()
+    print('check')
+    lda.fit(X_train, X_test)
+    print('check 1.005')
+   
+   # dtree = DecisionTreeClassifier()
+   # dtree.fit(X_train, X_test)
+    rf = RandomForestClassifier(n_estimators = 100, random_state=22)
+    rf.fit(X_train, X_test)
+    print('check 2')
+
+        #Build the model
+    xg = XGBClassifier(n_estimators=100, max_depth=2, learning_rate=1, objective='binary:logistic', random_state=22)
+
+    # Trained the model
+    xg.fit(X_train, X_test)
+
+   # print(X_test.columns)
+
+    rf_predictions = rf.predict(y_train)
+
+    lda_predictions = lda.predict(y_train)
+    xg_predictions = xg.predict(y_train)
+
+    #dtree_predictions = dtree.predict(y_train)
+
+    lr_predictions = lr.predict(y_train)
+
+    lr_whiterecidivism.append(white_recidivism(y_train, 'Race_WHITE', y_test, lr_predictions))
+    lr_whitenorecidivism.append(white_norecidivism(y_train, 'Race_WHITE', y_test, lr_predictions))
+    lr_blackrecidivism.append(black_recidivism(y_train, 'Race_WHITE', y_test, lr_predictions))
+    lr_blacknorecidivism.append(black_norecidivism(y_train, 'Race_WHITE', y_test, lr_predictions))
+
+    lda_whiterecidivism.append(white_recidivism(y_train, 'Race_WHITE', y_test, lda_predictions))
+    lda_whitenorecidivism.append(white_norecidivism(y_train, 'Race_WHITE', y_test, lda_predictions))
+    lda_blackrecidivism.append(black_recidivism(y_train, 'Race_WHITE', y_test, lda_predictions))
+    lda_blacknorecidivism.append(black_norecidivism(y_train, 'Race_WHITE', y_test, lda_predictions))
+
+    rf_whiterecidivism.append(white_recidivism(y_train, 'Race_WHITE', y_test, rf_predictions))
+    rf_whitenorecidivism.append(white_norecidivism(y_train, 'Race_WHITE', y_test, rf_predictions))
+    rf_blackrecidivism.append(black_recidivism(y_train, 'Race_WHITE', y_test, rf_predictions))
+    rf_blacknorecidivism.append(black_norecidivism(y_train, 'Race_WHITE', y_test, rf_predictions))
+
+    xg_whiterecidivism.append(white_recidivism(y_train, 'Race_WHITE', y_test, xg_predictions))
+    xg_whitenorecidivism.append(white_norecidivism(y_train, 'Race_WHITE', y_test, xg_predictions))
+    xg_blackrecidivism.append(black_recidivism(y_train, 'Race_WHITE', y_test, xg_predictions))
+    xg_blacknorecidivism.append(black_norecidivism(y_train, 'Race_WHITE', y_test, xg_predictions))
+
+   
+
+   
+    print('check 3')
+
+
+
+df = pd.DataFrame()
+
+df['LR White Recidivism'] = lr_whiterecidivism
+df['LR White No Recidivism'] = lr_whitenorecidivism
+df['LR Black Recidivism'] = lr_blackrecidivism
+df['LR Black No Recidivism'] = lr_blacknorecidivism
+
+df['LDA White Recidivism'] = lda_whiterecidivism
+df['LDA White No Recidivism'] = lda_whitenorecidivism
+df['LDA Black Recidivism'] = lda_blackrecidivism
+df['LDA Black No Recidivism'] = lda_blacknorecidivism
+
+df['RF White Recidivism'] = rf_whiterecidivism
+df['RF White No Recidivism'] = rf_whitenorecidivism
+df['RF Black Recidivism'] = rf_blackrecidivism
+df['RF Black No Recidivism'] = rf_blacknorecidivism
+
+df['XG White Recidivism'] = xg_whiterecidivism
+df['XG White No Recidivism'] = xg_whitenorecidivism
+df['XG Black Recidivism'] = xg_blackrecidivism
+df['XG Black No Recidivism'] = xg_blacknorecidivism
+
+df.to_csv('Contingencies.csv')
+
+data = pd.read_csv('Contingencies.csv')
+
+data.to_csv("C:/Users/anime/Downloads/contingency tables.csv")
