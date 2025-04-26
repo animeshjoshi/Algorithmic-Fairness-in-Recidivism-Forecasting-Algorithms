@@ -105,3 +105,32 @@ summary(equal_odds)
 
 total <- confusion_test$RFA + confusion_test$RFC + confusion_test$RFE + confusion_test$RFG
 total
+
+confusion_test
+
+two_sample_test_lower(confusion_test$LRG, confusion_test$LRH)
+two_sample_test_lower(confusion_test$LDG, confusion_test$LDH)
+
+two_sample_test_lower(confusion_test$RFG, confusion_test$RFH)
+two_sample_test_lower(confusion_test$XGG, confusion_test$XGH)
+
+two_sample_test_upper(confusion_test$LRC, confusion_test$LRD)
+two_sample_test_upper(confusion_test$LDC, confusion_test$LDD)
+two_sample_test_upper(confusion_test$RFC, confusion_test$RFD)
+two_sample_test_upper(confusion_test$XGC, confusion_test$XGD)
+
+
+names(ppr)
+
+two_sample_test_upper(ppr$LRPrivPPR, ppr$LRProtPPR)
+two_sample_test_lower(ppr$LRPrivNPR, ppr$LRProtNPR)
+
+
+contingencies <- read.csv("C:/Users/anime/Downloads/contingency tables.csv")
+
+head(contingencies)
+
+mean(contingencies$LR.White.Recicidivism)
+
+summary(contingencies)
+

@@ -10,7 +10,7 @@ from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 from xgboost import XGBClassifier
 
-
+df_list = []
 for test_fold in range(0, 250):
 
     print('start loop')
@@ -113,9 +113,11 @@ for test_fold in range(0, 250):
 
     new_df['XG Probabilities'] = preds
 
-    new_df.to_csv(dataframe_title)
+    df_list.append(new_df)
 
-    count += 1
+new_df = pd.concat(df_list)
+
+new_df.to_csv('Probability Folds Merged.csv')
 
    
 
