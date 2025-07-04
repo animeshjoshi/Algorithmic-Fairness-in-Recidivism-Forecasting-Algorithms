@@ -117,3 +117,20 @@ two_sample_test_twotail(data$LRPrivErrorRatio, data$LRProtErrorRatio)
 two_sample_test_twotail(data$LDAPrivErrorRatio, data$LDAProtErrorRatio)
 two_sample_test_twotail(data$RFPrivErrorRatio, data$RFProtErrorRatio)
 two_sample_test_twotail(data$XGPrivErrorRatio, data$XGProtErrorRatio)
+
+data$LRPrivAccuracy <- data$LRA + data$LRE
+data$LRProtAccuracy <- data$LRB + data$LRF
+
+data$RFPrivAccuracy <- data$RFA + data$RFE
+data$RFProtAccuracy <- data$RFB + data$RFF
+
+data$LDAPrivAccuracy <- data$LDA + data$LDE
+data$LDAProtAccuracy <- data$LDB + data$LDF
+
+data$XGPrivAccuracy <- data$XGA + data$XGE
+data$XGProtAccuracy <- data$XGB + data$XGF
+
+two_sample_test_twotail(data$LRPrivAccuracy, data$LRProtAccuracy)
+two_sample_test_twotail(data$LDAPrivAccuracy, data$LDAProtAccuracy)
+two_sample_test_twotail(data$RFPrivAccuracy, data$RFProtAccuracy)
+two_sample_test_twotail(data$XGPrivAccuracy, data$XGProtAccuracy)
